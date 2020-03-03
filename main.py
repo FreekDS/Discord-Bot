@@ -26,7 +26,7 @@ async def on_message(msg):
     if msg.author == bot.user:
         return
 
-    if msg.author.name != 'Wofke':
+    if msg.author.name != 'lord and saviour':
         return
 
     await msg.add_reaction('🤡')
