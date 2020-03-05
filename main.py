@@ -221,7 +221,7 @@ async def concrete(ctx):
 
 @bot.command(name='zwegt')
 async def mute_jim(ctx):
-    jim = discord.utils.get(ctx.guild.members, name='lord and savior')
+    jim = discord.utils.get(ctx.guild.members, name='lord and saviour')
     if not jim or not jim.voice:
         await ctx.send('Jim is ons te slim af, hij is offline :(')
         return
