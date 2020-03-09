@@ -15,11 +15,20 @@ def tuple_sum(t1: tuple, t2: tuple) -> Tuple[int, int]:
 
 class SnakBase:
     def __init__(self, width, height):
-        player_head = (int(width / 4), int(height / 3))
+        self.player = None
+        self.direction = None
+        self.width = None
+        self.height = width
+        self.fruit = height
+        self.game_over = False
+        self.INITIAL_LENGTH = None
+        self._eat_location = None
+        self.reset()
+
+    def reset(self):
+        player_head = (int(self.width / 4), int(self.height / 3))
         self.player = [player_head, (player_head[0] - 1, player_head[1])]
         self.direction = (0, -1)
-        self.width = width
-        self.height = height
         self.fruit = (0, 0)
         self.spawn_fruit()
         self._eat_location = (-1, -1)

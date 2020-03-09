@@ -38,7 +38,6 @@ class DiscordSnak(commands.Cog, SnakBase):
         self._playerObject = None
         self._headEmoji = None
         self._last_update = None
-
         self._start = None
         self._antispam = list()
 
@@ -127,6 +126,15 @@ class DiscordSnak(commands.Cog, SnakBase):
         res += '\n'
         return res
 
+    def reset(self):
+        super().reset()
+        self._game_msg = None
+        self._playing = False
+        self._last_update = None
+        self.game_over = False
+        self._playerObject = None
+        self._headEmoji = None
+
     async def _run_game(self):
         await self.bot.wait_until_ready()
         self.update()
@@ -157,6 +165,8 @@ class DiscordSnak(commands.Cog, SnakBase):
         for msg in self._antispam:
             await msg.delete()
             self._antispam.remove(msg)
+
+        self.reset()
 
 
 if __name__ == '__main__':
