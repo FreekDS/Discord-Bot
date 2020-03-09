@@ -17,9 +17,9 @@ class SnakBase:
     def __init__(self, width, height):
         self.player = None
         self.direction = None
-        self.width = None
-        self.height = width
-        self.fruit = height
+        self.width = width
+        self.height = height
+        self.fruit = None
         self.game_over = False
         self.INITIAL_LENGTH = None
         self._eat_location = None
