@@ -3,6 +3,7 @@ import os
 import random
 import configparser
 from discord.ext import commands
+from snaktest import DiscordSnak
 from dotenv import load_dotenv
 from utils import strip_cmd, \
     cfg_to_list, \
@@ -19,7 +20,6 @@ guild_name = os.getenv('GUILD_NAME')
 cfg = configparser.ConfigParser()
 cfg.read('res/config.ini', encoding='utf-8')
 
-client = discord.Client()
 bot = commands.Bot(command_prefix='!')
 
 
@@ -235,4 +235,5 @@ async def mute_jim(ctx):
     await ctx.send('Zwegt')
 
 
+bot.add_cog(DiscordSnak(bot))
 bot.run(token)
