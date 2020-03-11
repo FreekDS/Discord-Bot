@@ -77,6 +77,7 @@ class DiscordSnak(commands.Cog, SnakBase):
                 self._playing = False
                 return
             self._antispam.append(ctx.message)
+            self._headEmoji = None
             if head:
                 self._headEmoji = head
             self._playerObject = ctx.author
