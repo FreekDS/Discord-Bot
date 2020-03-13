@@ -18,9 +18,11 @@ def register_cogs():
     from admin.AdminCommands import AdminCog
     from jim.JimCommands import JimCog
     from concreet.ConcreetCommands import ConcreetCog
+    from snak.SnakCommands import SnakCog
     bot.add_cog(ConcreetCog(bot, cfg))
     bot.add_cog(JimCog(bot))
-    bot.add_cog(AdminCog(bot))
+    bot.add_cog(AdminCog(bot, cfg))
+    bot.add_cog(SnakCog(bot))
 
 
 if __name__ == '__main__':

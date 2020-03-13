@@ -26,6 +26,7 @@ class ConcreetCog(commands.Cog):
                     await member.send(embed=pick)
 
     @commands.command(name="concreet")
+    @commands.check(not_dm)
     async def concrete(self, ctx):
         names = [n for n in cfg_to_list(self.cfg['Concrete boys']['images']) if n != '']
         images = [create_image(n) for n in names]

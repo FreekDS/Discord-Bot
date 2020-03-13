@@ -1,5 +1,4 @@
 import random
-from typing import Tuple
 
 DIRECTIONS = {
     "UP": (0, -1),
@@ -7,10 +6,6 @@ DIRECTIONS = {
     "RIGHT": (1, 0),
     "LEFT": (-1, 0)
 }
-
-
-def tuple_sum(t1: tuple, t2: tuple) -> Tuple[int, int]:
-    return t1[0] + t2[0], t1[1] + t2[1]
 
 
 class SnakBase:
@@ -22,7 +17,8 @@ class SnakBase:
         self.fruit = None
         self.game_over = False
         self.INITIAL_LENGTH = None
-        self._eat_location = None
+        self._eat_locations = []
+        self._has_updated = False
         self.reset()
 
     def reset(self):
@@ -31,7 +27,7 @@ class SnakBase:
         self.direction = (0, -1)
         self.fruit = (0, 0)
         self.spawn_fruit()
-        self._eat_location = (-1, -1)
+        self._eat_locations = []
         self.game_over = False
         self.INITIAL_LENGTH = len(self.player)
 
@@ -66,14 +62,15 @@ class SnakBase:
         return x, y
 
     def update(self):
-        if self.player[-1] == self._eat_location:
-            self._eat_location = (-1, -1)
+        self._has_updated = True
+        if self.player[-1] in self._eat_locations:
+            self._eat_locations.remove(self.player[-1])
         new_head = self._get_new_head()
         if new_head in self.player:
             self.game_over = True
         self.player.insert(0, new_head)
         if new_head == self.fruit:
-            self._eat_location = self.fruit
+            self._eat_locations.append(self.fruit)
             self.player.insert(0, new_head)
             self.spawn_fruit()
         self.player.pop()
@@ -86,9 +83,20 @@ class SnakBase:
             self.fruit = loc
 
     def update_direction(self, direction: tuple):
+        if not self._has_updated:
+            # At least one update needs to happen before a new move can be made
+            return
         if not self._is_horizontal(direction) and not self._is_vertical(direction):
             raise AttributeError('Invalid direction')
+
+        # Direction can only be updated when these conditions are false
+        if self._is_horizontal(direction) and self._is_horizontal(self.direction):
+            return
+        if self._is_vertical(direction) and self._is_vertical(self.direction):
+            return
+
         self.direction = direction
+        self._has_updated = False  # Require to do at least one update
 
     def __str__(self):
         res = '  '
@@ -99,7 +107,7 @@ class SnakBase:
                 if x == 0:
                     res += '| '
                 if (x, y) in self.player:
-                    if (x, y) == self._eat_location:
+                    if (x, y) in self._eat_locations:
                         res += 'X '
                     else:
                         res += 'x '
@@ -119,7 +127,7 @@ class SnakBase:
         print(self)
 
 
-class LinkedList():
+class SimpleLinkedList():
     def __init__(self, content: list):
         self._current = -1
         self._content = content
@@ -141,7 +149,7 @@ if __name__ == '__main__':
     b.fruit = (b._head[0] + 4, b._head[1])
 
     directions = [(0, 1), (-1, 0), (0, -1), (1, 0)]
-    l = LinkedList(directions)
+    l = SimpleLinkedList(directions)
 
     print(str(b))
     b.display()

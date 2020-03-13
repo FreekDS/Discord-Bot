@@ -1,5 +1,8 @@
 import re
 from discord import File, Embed
+from discord.ext import commands
+import discord
+from functools import wraps
 
 URL_REGEX = re.compile(
     r'^(?:http|ftp)s?://'  # http:// or https://
@@ -8,7 +11,7 @@ URL_REGEX = re.compile(
     r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
     r'(?::\d+)?'  # optional port
     r'(?:/?|[/?]\S+)'
-    r'*(.png|.bmp|.gif|.jpg)$'
+    r'*(.png|.bmp|.gif|.jp(e)?g)$'
 
     , re.IGNORECASE)
 
@@ -54,6 +57,25 @@ def update_cfg(cfg):
 
 def is_url(string):
     return re.match(URL_REGEX, string) is not None
+
+
+async def not_dm(*args, **kwargs):
+    msg = [x for x in args if isinstance(x, discord.Message)]
+    if len(msg) != 0:
+        return msg[0].channel is discord.DMChannel
+
+    msg = [x for x in [*kwargs.values()] if isinstance(x, discord.Message)]
+    if len(msg) != 0:
+        return msg[0].channel is discord.DMChannel
+
+    ctx = [x for x in args if isinstance(x, commands.Context)]
+    if len(ctx) != 0:
+        f = ctx[0].channel is not discord.DMChannel
+        return not isinstance(ctx[0].channel, discord.DMChannel)
+
+    ctx = [x for x in [*kwargs.values()] if isinstance(x, commands.Context)]
+    if len(ctx) != 0:
+        return ctx[0].channel is discord.DMChannel
 
 
 def create_image(n):
